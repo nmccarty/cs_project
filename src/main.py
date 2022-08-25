@@ -40,7 +40,7 @@ class MainWindow(QMainWindow):
         self.layout.addWidget(self.button)
         self.layoutWidget = QWidget()
         self.layoutWidget.setSizePolicy(QSizePolicy.Maximum, QSizePolicy.MinimumExpanding)
-        self.layout.SetMaximumWidth(700)
+        self.layoutWidget.setMaximumWidth(700)
         self.layoutWidget.setLayout(self.layout)
 
         self.setCentralWidget(self.layoutWidget)
