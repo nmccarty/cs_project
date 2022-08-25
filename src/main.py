@@ -7,6 +7,7 @@ from PyQt5.QtWidgets import (
     QWidget,
     QLineEdit,
     QDialog,
+    QSizePolicy,
 )
 from PyQt5.QtCore import pyqtSlot, Qt
 import sys
@@ -19,11 +20,6 @@ def main():
     window.show()
 
     sys.exit(app.exec())
-
-
-@pyqtSlot()
-def showDialog():
-    pass
 
 
 class MainWindow(QMainWindow):
@@ -43,6 +39,8 @@ class MainWindow(QMainWindow):
         self.layout.addWidget(self.textBox)
         self.layout.addWidget(self.button)
         self.layoutWidget = QWidget()
+        self.layoutWidget.setSizePolicy(QSizePolicy.Maximum, QSizePolicy.MinimumExpanding)
+        self.layout.SetMaximumWidth(700)
         self.layoutWidget.setLayout(self.layout)
 
         self.setCentralWidget(self.layoutWidget)
