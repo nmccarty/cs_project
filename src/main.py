@@ -39,7 +39,9 @@ class MainWindow(QMainWindow):
         self.layout.addWidget(self.textBox)
         self.layout.addWidget(self.button)
         self.layoutWidget = QWidget()
-        self.layoutWidget.setSizePolicy(QSizePolicy.Maximum, QSizePolicy.MinimumExpanding)
+        self.layoutWidget.setSizePolicy(
+            QSizePolicy.Maximum, QSizePolicy.MinimumExpanding
+        )
         self.layoutWidget.setMaximumWidth(700)
         self.layoutWidget.setLayout(self.layout)
 
