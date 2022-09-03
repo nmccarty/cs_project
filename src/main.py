@@ -23,6 +23,14 @@ def main():
 
     sys.exit(app.exec())
 
+@dataclass
+class GameState:
+    pass
+
+@dataclass
+class StartState:
+    pass
+
 @tagged_union
 class State:
     Start = StartState
@@ -30,8 +38,8 @@ class State:
 
 @dataclass
 class MainWindow:
-    qwindow: QMainWindow
-    state: State
+    qwindow: QMainWindow = field(default=QMainWindow())
+    state: State = field(default=State.StartState)
 
     def start(self):
         qwindow.show()

@@ -1,0 +1,4 @@
+chess ~= 1.9.2
+pyqt5 ~= 5.15.7
+setuptools >= 65.0.0
+tagged_union ~= 0.0.2
