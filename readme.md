@@ -2,7 +2,5 @@
 
 ## Dependencies
 
-Install dependencies by running `pip -r requirements.txt`. If installing PyQt5 fails,
-Upgrade setuptools to the latest version: `pip install --upgrade setuptools`.
-
+Install dependencies by running `pip install -r requirements.txt`.
 After installing dependencies, run the program by executing `src/main.py`. 
