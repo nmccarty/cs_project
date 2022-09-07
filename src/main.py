@@ -3,6 +3,7 @@ from PyQt5.QtWidgets import (
     QMainWindow,
     QVBoxLayout,
     QHBoxLayout,
+    QLayout,
     QPushButton,
     QLabel,
     QWidget,
@@ -32,21 +33,32 @@ PlayerType = Enum("PlayerType", "Human Computer")
 class GameState:
     board: chess.Board = field(init=False)
 
-    def construct_widget(self, parent):
+    def construct_widget(self):
         pass
 
 
 @dataclass
 class StartState:
-    def construct_widget(self, parent):
+    def construct_widget(self):
         container_a = QWidget()
-        container_b = QWidget()
-        container_a_layout = QHBoxLayout()
-        container_a_layout.addWidget(container_b)
-        container_a.setLayout(container_a_layout)
 
-        container_b_layout = QVBoxLayout()
-        container_b.setLayout(container_b_layout)
+        layout_a = QHBoxLayout()
+        container_a.setLayout(layout_a)
+
+        layout_b = QVBoxLayout()
+        layout_b.setSizeConstraint(QLayout.SetMinAndMaxSize)
+        layout_a.addLayout(layout_b)
+        layout_a.setAlignment(layout_b, Qt.AlignCenter)
+
+        new_game_button = QPushButton("New game", container_a)
+        load_existing_game_button = QPushButton("Load existing game", container_a)
+        load_statistics_button = QPushButton("Load statistics", container_a)
+        settings_button = QPushButton("Settings", container_a)
+        layout_b.addWidget(new_game_button)
+        layout_b.addWidget(load_existing_game_button)
+        layout_b.addWidget(load_statistics_button)
+        layout_b.addWidget(settings_button)
+
         return container_a
 
 
@@ -58,8 +70,8 @@ class State:
     tag: StageTag = field(default=StageTag.Start)
     inner: any = field(default_factory=StartState)
 
-    def construct_widget(self, parent):
-        return self.inner.construct_widget(parent)
+    def construct_widget(self):
+        return self.inner.construct_widget()
 
 
 @dataclass
@@ -68,7 +80,7 @@ class MainWindow:
     state: State = field(default_factory=State)
 
     def start(self):
-        self.qwindow = self.state.construct_widget(None)
+        self.qwindow = self.state.construct_widget()
         self.qwindow.show()
 
 
