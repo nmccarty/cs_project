@@ -12,9 +12,9 @@ from PyQt5.QtWidgets import (
     QSizePolicy,
 )
 from PyQt5.QtCore import pyqtSlot, Qt
-from tagged_union import tagged_union, Unit
 from dataclasses import dataclass, field
 from enum import Enum
+from functools import partial
 import chess
 import sys
 
@@ -26,20 +26,30 @@ def main():
     sys.exit(app.exec())
 
 
-PlayerType = Enum("PlayerType", "Human Computer")
+State = Enum("State", "Start Game")
 
 
 @dataclass
-class GameState:
-    board: chess.Board = field(init=False)
+class MainWindow:
+    qwindow: QMainWindow = field(default_factory=QMainWindow)
+    state: State = field(default=State.Start)
 
-    def construct_widget(self):
-        pass
+    def start(self):
+        self.build_widgets()
+        self.qwindow.show()
 
+    def build_widgets(self):
+        match self.state:
+            case State.Start:
+                self.qwindow.setCentralWidget(self.construct_start_widget())
+            case State.Game:
+                self.qwindow.setCentralWidget(self.construct_game_widget())
 
-@dataclass
-class StartState:
-    def construct_widget(self):
+    def switch_state(self, new_state):
+        self.state = new_state
+        self.build_widgets()
+
+    def construct_start_widget(self):
         container_a = QWidget()
 
         layout_a = QHBoxLayout()
@@ -59,29 +69,27 @@ class StartState:
         layout_b.addWidget(load_statistics_button)
         layout_b.addWidget(settings_button)
 
+        new_game_button.clicked.connect(partial(self.switch_state, State.Game))
+
         return container_a
 
+    def construct_game_widget(self):
+        container_a = QWidget()
 
-StageTag = Enum("StageTag", "Start Game")
+        layout_a = QHBoxLayout()
+        container_a.setLayout(layout_a)
 
+        layout_b = QVBoxLayout()
+        layout_b.setSizeConstraint(QLayout.SetMinAndMaxSize)
+        layout_a.addLayout(layout_b)
+        layout_a.setAlignment(layout_b, Qt.AlignCenter)
 
-@dataclass
-class State:
-    tag: StageTag = field(default=StageTag.Start)
-    inner: any = field(default_factory=StartState)
+        back_button = QPushButton("←", container_a)
+        layout_b.addWidget(back_button)
 
-    def construct_widget(self):
-        return self.inner.construct_widget()
+        back_button.clicked.connect(partial(self.switch_state, State.Start))
 
-
-@dataclass
-class MainWindow:
-    qwindow: QMainWindow = field(default_factory=QMainWindow)
-    state: State = field(default_factory=State)
-
-    def start(self):
-        self.qwindow = self.state.construct_widget()
-        self.qwindow.show()
+        return container_a
 
 
 main()
