@@ -15,6 +15,7 @@ from PyQt5.QtCore import pyqtSlot, Qt
 from dataclasses import dataclass, field
 from enum import Enum
 from functools import partial
+from board_widget import BoardWidget
 import chess
 import sys
 
@@ -74,22 +75,25 @@ class MainWindow:
         return container_a
 
     def construct_game_widget(self):
-        container_a = QWidget()
+        container_top = QWidget()
 
-        layout_a = QHBoxLayout()
-        container_a.setLayout(layout_a)
+        layout_top = QHBoxLayout()
+        container_top.setLayout(layout_top)
 
-        layout_b = QVBoxLayout()
-        layout_b.setSizeConstraint(QLayout.SetMinAndMaxSize)
-        layout_a.addLayout(layout_b)
-        layout_a.setAlignment(layout_b, Qt.AlignCenter)
+        layout_buttons = QVBoxLayout()
+        layout_buttons.setSizeConstraint(QLayout.SetMinAndMaxSize)
+        layout_top.addLayout(layout_buttons)
+        #layout_top.setAlignment(layout_buttons, Qt.AlignCenter)
 
-        back_button = QPushButton("←", container_a)
-        layout_b.addWidget(back_button)
+        back_button = QPushButton("←", container_top)
+        layout_buttons.addWidget(back_button)
 
         back_button.clicked.connect(partial(self.switch_state, State.Start))
 
-        return container_a
+        board_widget = BoardWidget()
+        layout_top.addWidget(board_widget)
+
+        return container_top
 
 
 main()
